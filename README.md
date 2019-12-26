@@ -86,7 +86,8 @@ Utiliza o método `DELETE` para pesquisar e apagar um objeto no banco utilizando
 ```  
 Nesse caso 'resp' retorna uma mensagem confirmando que a moeda do selecionado id foi apagada com sucesso. Ao tentar listar as moedas com código USD agora ela já não estará mais na lista.
 - **/api/troco_certo/**  
-Para ver essa função em ação, digamos que você é o/a operador(a) de caixa de uma loja e o valor final de uma compra foi R$37,50. O cliente pagou com uma nota de R$100,00. Sem spoilers do valor correto e sem necessidade do cálculo mental, execute o código abaixo no terminal para ter o valor correto do troco e as cédulas que você deve retornar ao cliente (pensando na menor quantidade possível de cédulas e moedas):
+Para ver essa função em ação, digamos que você é o/a operador(a) de caixa de uma loja e o valor final de uma compra foi R$37,50. O cliente pagou com uma nota de R$100,00. Sem spoilers do valor correto e sem necessidade do cálculo mental, execute o código abaixo no terminal para ter o valor correto do troco e as cédulas que você deve retornar ao cliente (pensando na menor quantidade possível de cédulas e moedas):  
+Parâmetros: `valor_total` - valor final da compra, `valor_pago` - valor recebido do cliente para o pagamento  
 ```
 >>> import requests
 >>> url = "http://localhost:8000/api/troco_certo/"
