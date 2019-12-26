@@ -49,7 +49,7 @@ Método `POST` que recebe os dados de valor, tipo('nota' ou 'moeda') e código(s
 >>> resp = r.text
 >>> resp
 ```
-Ao digitar 'resp' e apertar enter você deverá receber uma mensagem com o valor "Nova moeda registrada com sucesso." em caso de sucesso. No método seguinte você listará todas as moedas e já poderá ver no fim da lista a que criou agora.
+Ao digitar 'resp' e apertar enter você deverá receber uma mensagem com o valor "Nova moeda registrada com sucesso." em caso de sucesso. No método seguinte você verá como consultar moedas por código e já poderá ver a que criou agora.
 - **/api/listar_moedas/**  
 Método `GET` que recebe o código das moedas que deseja visualizar e retorna uma lista com id, valor e código da moeda de todas as moedas registradas na base. Visualize a moeda em USD que acabou de criar fazendo uma requisição que envie o código:  
 ```
