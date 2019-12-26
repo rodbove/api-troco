@@ -17,7 +17,7 @@ API que calcula o troco correto e a menor quantidade possível de cédulas a dev
 ## Instalação
 Inicie baixando ou clonando o repositório em seu computador. Para iniciar o projeto garanta que Python e o módulo pip estejam já instalados, caso não estejam, instale o Python na versão 3.7.4 [clicando aqui](https://www.python.org/downloads/release/python-374/).
 
-Após ter o Python instalado, baixe e instale o pip utilizando o terminal do sistema operacional que utiliza com o comando correspondente:
+Após ter o Python instalado, baixe e instale o pip utilizando o terminal do sistema operacional de seu computador com o comando correspondente:  
 Baixar: `curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py`  
 Windows: `python get-pip.py` ou `py get-pip.py`  
 Linux: `$ sudo apt install python3-pip`  
