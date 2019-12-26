@@ -51,18 +51,40 @@ Método `POST` que recebe os dados de valor, tipo('nota' ou 'moeda') e código(s
 ```
 Ao digitar 'resp' e apertar enter você deverá receber uma mensagem com o valor "Nova moeda registrada com sucesso." em caso de sucesso. No método seguinte você listará todas as moedas e já poderá ver no fim da lista a que criou agora.
 - **/api/listar_moedas/**  
-Mátodo `GET` que retorna uma lista com id, valor e código da moeda de todas as moedas registradas na base. Para fazer uma requisição no terminal:
+Método `GET` que recebe o código das moedas que deseja visualizar e retorna uma lista com id, valor e código da moeda de todas as moedas registradas na base. Visualize a moeda em USD que acabou de criar fazendo uma requisição que envie o código:  
 ```
 >>> import requests
 >>> url = "http://localhost:8000/api/listar_moedas/"
->>> r = requests.get(url = url)
+>>> data = {"codigo": "USD"}
+>>> r = requests.get(url = url, data = data)
 >>> resp = r.text
 >>> resp
 ```
-'resp' nesse caso deverá retornar a lista deverá retornar com os dados informados e observando no fim da lista poderá ver a moeda que criou no método anterior (caso tenha o executado).
+'resp' nesse caso deverá retornar a lista de moedas com código USD, nesse caso apenas a que criou acima. Você também pode fazer essa requisição utilizando o código "BRL", todas as cédulas estão cadastradas na lista.
 
-- **/api/atualizar_moeda/**
+- **/api/atualizar_moeda/**  
+Utiliza o método `POST` para receber o id da moeda pelo parâmetro "moeda_id" e altera o valor dela para o enviado como "novo_valor". Vamos atualizar a nota de 1 dólar que criamos para 100 dólares:  
+Obs: O valor para "moeda_id" pode ser encontrado ao listar as moedas de código USD como vimos acima.  
+```
+>>> import requests
+>>> url = "http://localhost:8000/api/altualizar_moeda/"
+>>> data = {"moeda_id": 15, "novo_valor": 100}
+>>> r = requests.post(url = url, data = data)
+>>> resp = r.text
+>>> resp
+```  
+'resp' retornará uma mensagem de confirmação que a moeda com o id enviado recebeu um novo valor. Ao listar as moedas de código USD agora já será possível visualizar o novo valor para o mesmo id.
 - **/api/deletar_moeda/**
+Utiliza o método `DELETE` para pesquisar e apagar um objeto no banco utilizando o "moeda_id". Vamos deletar a moeda em USD que criamos com a seguinte requisição:  
+```
+>>> import requests
+>>> url = "http://localhost:8000/api/deletar_moeda/"
+>>> data = {"moeda_id": 15}
+>>> r = requests.delete(url = url, data = data)
+>>> resp = r.text
+>>> resp
+```  
+Nesse caso 'resp' retorna uma mensagem confirmando que a moeda do selecionado id foi apagada com sucesso. Ao tentar listar as moedas com código USD agora ela já não estará mais na lista.
 - **/api/troco_certo/**  
 Para ver essa função em ação, digamos que você é o/a operador(a) de caixa de uma loja e o valor final de uma compra foi R$37,50. O cliente pagou com uma nota de R$100,00. Sem spoilers do valor correto e sem necessidade do cálculo mental, execute o código abaixo no terminal para ter o valor correto do troco e as cédulas que você deve retornar ao cliente (pensando na menor quantidade possível de cédulas e moedas):
 ```
