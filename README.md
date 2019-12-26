@@ -74,7 +74,7 @@ Obs: O valor para "moeda_id" pode ser encontrado ao listar as moedas de código 
 >>> resp
 ```  
 'resp' retornará uma mensagem de confirmação que a moeda com o id enviado recebeu um novo valor. Ao listar as moedas de código USD agora já será possível visualizar o novo valor para o mesmo id.
-- **/api/deletar_moeda/**
+- **/api/deletar_moeda/**  
 Utiliza o método `DELETE` para pesquisar e apagar um objeto no banco utilizando o "moeda_id". Vamos deletar a moeda em USD que criamos com a seguinte requisição:  
 ```
 >>> import requests
