@@ -40,9 +40,18 @@ Após ter instalado todos os módulos em seu ambiente virtual e estar com o ambi
 Para fazer requisições você pode utilizar o próprio navegador pois na página de cada método haverá uma interface criada automaticamente pelo módugo rest_framework. Porém, recomendo que utilize um serviço como Postman ou o próprio terminal para requisições completas. Abaixo listei todos os métodos e exemplos de como requisitar pelo terminal. Para todos será necessário manter uma janela do terminal com o servidor ativo e outra para fazer a requisição. Na janela onde fará as requisições, instale o módulo "requests" com o comando `pip install requests` e depois ative o interpretador python com o comando `python`. A API pode ser utilizada com os seguintes métodos e respectivas funções:
 
 - /api/criar_moeda/  
-Cria uma nova moeda na base
-- /api/listar_moedas/
-Retorna uma lista com id, valor e código da moeda de todas as moedas registradas na base. Para fazer uma requisição no terminal:
+Método `POST` que recebe os dados de valor, tipo('nota' ou 'moeda') e código(sigla da taxa de câmbio da moeda, ex: BRL, USD) para criar uma nova moeda na base. Crie a nota de 1 dólar na base com os seguintes comandos no interpretador python no terminal:  
+```
+>>> import requests
+>>> url = "http://localhost:8000/api/criar_moeda/"
+>>> data = {"valor": 1, "tipo": "nota", "codigo": "USD"}
+>>> r = requests.post(url = url, data = data)
+>>> resp = r.text
+>>> resp
+```
+Ao digitar 'resp' e apertar enter você deverá receber uma mensagem com o valor "Nova moeda registrada com sucesso." em caso de sucesso. No método seguinte você listará todas as moedas e já poderá ver no fim da lista a que criou agora.
+- /api/listar_moedas/  
+Mátodo `GET` que retorna uma lista com id, valor e código da moeda de todas as moedas registradas na base. Para fazer uma requisição no terminal:
 ```
 >>> import requests
 >>> url = "http://localhost:8000/api/listar_moedas/"
@@ -50,8 +59,18 @@ Retorna uma lista com id, valor e código da moeda de todas as moedas registrada
 >>> resp = r.text
 >>> resp
 ```
-Ao digitar resp e apertar enter a lista deverá retornar com os dados informados.
+'resp' nesse caso deverá retornar a lista deverá retornar com os dados informados e observando no fim da lista poderá ver a moeda que criou no método anterior (caso tenha o executado).
 
 - /api/atualizar_moeda/
 - /api/deletar_moeda/
-- /api/troco_certo/
+- /api/troco_certo/  
+Para ver essa função em ação, digamos que você é o/a operador(a) de caixa de uma loja e o valor final de uma compra foi R$37,50. O cliente pagou com uma nota de R$100,00. Sem spoilers do valor correto e sem necessidade do cálculo mental, execute o código abaixo no terminal para ter o valor correto do troco e as cédulas que você deve retornar ao cliente (pensando na menor quantidade possível de cédulas e moedas):
+```
+>>> import requests
+>>> url = "http://localhost:8000/api/troco_certo/"
+>>> data = {"valor_total": 37.5, "valor_pago": 100}
+>>> r = requests.post(url = url, data = data)
+>>> resp = r.text
+>>> resp
+```  
+O retorno de 'resp' retornará o troco correto e as cédulas em uma mensagem "bonita". Também seria possível alterar o código para retornar um JSON com essas informações para que elas pudessem ser lidas, interpretadas e retornadas por um possível sistema de caixa da maneira preferida pela empresa.
