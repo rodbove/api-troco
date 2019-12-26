@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+class listar_moedas(serializers.Serializer):
+	codigo = serializers.CharField(max_length=10)
 
 class criar_moeda(serializers.Serializer):
 	valor = serializers.FloatField()
@@ -8,11 +10,12 @@ class criar_moeda(serializers.Serializer):
 
 
 class atualizar_moeda(serializers.Serializer):
-	campo = serializers.CharField(max_length=10)
+	moeda_id = serializers.IntegerField()
+	novo_valor = serializers.IntegerField()
 
 
 class deletar_moeda(serializers.Serializer):
-	id = serializers.IntegerField()
+	moeda_id = serializers.IntegerField()
 
 
 class troco_certo(serializers.Serializer):

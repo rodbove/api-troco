@@ -8,17 +8,26 @@ from . import serializers
 
 from collections import Counter
 
+# Página inicial
+def index(request):
+	return render(request, 'api/index.html')
+
 	
 class listar_moedas(APIView):
 	def get(self, request, format=None):
-		"""Retorna uma lista com valores, tipo e código das moedas disponívels na base."""
+		"""Recebe o código desejadoRetorna uma lista com valores, tipo e código das moedas disponívels na base."""
+
+		serializer = serializers.listar_moedas(data=request.data)
 
 		moedas = []
 
-		for m in moedaCorrente.objects.all():
-			moedas.append(f'id: {m.id}, R${m.valor}, Tipo: {m.tipo}, Código: {m.codigo}')
-
-		return Response({'message': 'Moedas atualmente no sistema', 'moedas': moedas})
+		if serializer.is_valid():
+			codigo = serializer.data.get('codigo')		
+			for m in moedaCorrente.objects.filter(codigo=codigo):
+				moedas.append(f'id: {m.id}, R${m.valor}, Tipo: {m.tipo}, Código: {m.codigo}')
+			return Response({'moedas': moedas})
+		else:
+			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class criar_moeda(APIView):
@@ -37,15 +46,22 @@ class criar_moeda(APIView):
 
 
 class atualizar_moeda(APIView):
-	def put(self, request, pk=None):
+	def post(self, request):
 		"""Atualiza um objeto específico na base"""
 
 		serializer = serializers.atualizar_moeda(data=request.data)
 
 		if serializer.is_valid():
-			campo = serializer.data.get('campo')
+			moeda_id = serializer.data.get('moeda_id')
+			novo_valor = serializer.data.get('novo_valor')
+			moeda = moedaCorrente.objects.get(id=moeda_id)
 
-		return Reponse({'method': 'put'})
+			moeda.valor = novo_valor
+			moeda.save()
+			
+			return Response({'message': f'Moeda com id {moeda.id} recebeu novo valor.'})
+		else:
+			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class deletar_moeda(APIView):
@@ -55,10 +71,9 @@ class deletar_moeda(APIView):
 		serializer = serializers.deletar_moeda(data=request.data)
 
 		if serializer.is_valid():
-			objeto = moedaCorrente.objects.get(id=serializer.data.get('id'))
+			objeto = moedaCorrente.objects.get(id=serializer.data.get('moeda_id'))
 			objeto.delete()
-			message = 'Moeda deletada da base'
-			return Response({'message': message})
+			return Response({'message': f"Moeda de id '{serializer.data.get('moeda_id')}' deletada com sucesso."})
 		else:
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -100,7 +115,7 @@ class troco_certo(APIView):
 				for key in c:
 					display.append(f'{c[key]}x R${key}')
 
-				return Response(f'Troco total: {troco_total}. Devolver com as seguintes notas: {display}')
+				return Response(f'Troco total: {troco_total}. Devolver com as seguintes notas e moedas: {display}')
 
 
 		else:
