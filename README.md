@@ -1,5 +1,5 @@
 # api-troco
-API que calcula o troco correto e a menor quantidade possível de cédulas a devolver.
+API que calcula o troco correto e a menor quantidade possível de cédulas a devolver. Contém endpoints implementados para total funcionalidade CRUD com dados armazenados num banco MongoDB.
 
 ## Módulos utilizados e versões
 - Python 3.7.4
@@ -39,17 +39,19 @@ Após ter instalado todos os módulos em seu ambiente virtual e estar com o ambi
 ## Fazendo requisições
 Para fazer requisições você pode utilizar o próprio navegador pois na página de cada método haverá uma interface criada automaticamente pelo módugo rest_framework. Porém, recomendo que utilize um serviço como Postman ou o próprio terminal para requisições completas. Abaixo listei todos os métodos e exemplos de como requisitar pelo terminal. Para todos será necessário manter uma janela do terminal com o servidor ativo e outra para fazer a requisição. Na janela onde fará as requisições, instale o módulo "requests" com o comando `pip install requests` e depois ative o interpretador python com o comando `python`. A API pode ser utilizada com os seguintes métodos e respectivas funções:
 
-- /criar_moeda/  
+- /api/criar_moeda/  
 Cria uma nova moeda na base
-- /listar_moedas/  
+- /api/listar_moedas/
 Retorna uma lista com id, valor e código da moeda de todas as moedas registradas na base. Para fazer uma requisição no terminal:
-    >>> import requests
-    >>> url = "http://localhost:8000/api/listar_moedas/"
-    >>> r = requests.get(url = url)
-    >>> resp = r.text
-    >>> resp
- Ao digitar resp e apertar enter a lista deverá retornar com os dados informados.
+```
+>>> import requests
+>>> url = "http://localhost:8000/api/listar_moedas/"
+>>> r = requests.get(url = url)
+>>> resp = r.text
+>>> resp
+```
+Ao digitar resp e apertar enter a lista deverá retornar com os dados informados.
 
-- /atualizar_moeda/
-- /deletar_moeda/
-- /troco_certo/
+- /api/atualizar_moeda/
+- /api/deletar_moeda/
+- /api/troco_certo/
