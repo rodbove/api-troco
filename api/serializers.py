@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 class listar_moedas(serializers.Serializer):
 	codigo = serializers.CharField(max_length=10)
+	
 
 class criar_moeda(serializers.Serializer):
 	valor = serializers.FloatField()
