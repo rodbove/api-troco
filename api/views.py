@@ -94,14 +94,16 @@ class troco_certo(APIView):
 		if serializer.is_valid():
 			valor_total = serializer.data.get('valor_total')
 			valor_pago = serializer.data.get('valor_pago')
-
+					 
+			# Confere se o valor dado pelo cliente supre o valor da compra
 			if valor_pago < valor_total:
 				return Response(f'Valor recebido é menor do que o total da compra, faltam R${valor_total - valor_pago} para finalizar a compra.')
 			else:
 				troco_total = valor_pago - valor_total
 				zerar_troco = troco_total
 				devolver = []
-
+				
+				# Lógica para descobrir quais notas serão utilizadas para devolver o troco correto
 				while zerar_troco > 0:
 					for i in valores:
 						if i <= zerar_troco:
