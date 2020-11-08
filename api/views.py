@@ -13,11 +13,12 @@ def index(request):
 	return render(request, 'api/index.html')
 
 	
-class listar_moedas(APIView):
+class coins(APIView):
 	def get(self, request, format=None):
 		"""Recebe o código desejadoRetorna uma lista com valores, tipo e código das moedas disponívels na base."""
 
-		serializer = serializers.listar_moedas(data=request.data)
+		serializer = serializers.listar_moedas(data=request.query_params)
+		print(serializer)
 
 		moedas = []
 
@@ -29,8 +30,6 @@ class listar_moedas(APIView):
 		else:
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-class criar_moeda(APIView):
 	def post(self, request): 
 		"""Cria uma nova moeda com valor, tipo e código na base."""
 
@@ -44,9 +43,7 @@ class criar_moeda(APIView):
 		else:
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-class atualizar_moeda(APIView):
-	def post(self, request):
+	def put(self, request):
 		"""Atualiza um objeto específico na base"""
 
 		serializer = serializers.atualizar_moeda(data=request.data)
@@ -63,12 +60,10 @@ class atualizar_moeda(APIView):
 		else:
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-class deletar_moeda(APIView):
 	def delete(self, request, pk=None):
 		"""Deleta um objeto na base utilizando pesquisa por id"""
 
-		serializer = serializers.deletar_moeda(data=request.data)
+		serializer = serializers.deletar_moeda(data=request.query_params)
 
 		if serializer.is_valid():
 			objeto = moedaCorrente.objects.get(id=serializer.data.get('moeda_id'))
@@ -76,7 +71,6 @@ class deletar_moeda(APIView):
 			return Response({'message': f"Moeda de id '{serializer.data.get('moeda_id')}' deletada com sucesso."})
 		else:
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class troco_certo(APIView):
 	def post(self, request):

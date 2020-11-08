@@ -2,17 +2,22 @@
 API que calcula o troco correto e a menor quantidade possível de cédulas a devolver. Contém endpoints implementados para total funcionalidade CRUD com dados armazenados num banco MongoDB.
 
 ## Módulos utilizados e versões
-- Python 3.7.4
+- astroid 2.4.2
 - dataclasses 0.6
 - Django 2.2.9
 - djangorestframework 3.11.0
 - djongo 1.2.38
 - dnspython 1.16.0
-- pip 19.3.1
+- isort 5.6.4
+- lazy-object-proxy 1.4.3
+- mccabe 0.6.1
+- pylint 2.6.0
 - pymongo 3.10.0
 - pytz 2019.3
-- setuptools 40.8.0
+- six 1.15.0
 - sqlparse 0.2.4
+- toml 0.10.2
+- wrapt 1.12.1
 
 ## Instalação
 Inicie baixando ou clonando o repositório em seu computador. Para iniciar o projeto garanta que Python e o módulo pip estejam já instalados, caso não estejam, instale o Python na versão 3.7.4 [clicando aqui](https://www.python.org/downloads/release/python-374/).
@@ -28,7 +33,7 @@ Para utilizar todas as funções é importante que todos os módulos listados ac
 Primeiro, utilizando o terminal vá até o diretório onde salvou o projeto, crie e inicie um ambiente virtual com os seguintes comandos:  
 Criar: `python -m venv venv`  
 Iniciar no Windows: `venv\Scripts\activate`  
-Linux e Mac: `$ source venv\bin\activate`  
+Linux e Mac: `$ source venv/bin/activate`  
 
 Para a instalação dos módulos, rode o seguinte comando no terminal, substitua com o caminho para o diretório onde salvou esse arquivo:
 `pip install -r \path\requirements.txt`.
@@ -39,52 +44,50 @@ Após ter instalado todos os módulos em seu ambiente virtual e estar com o ambi
 ## Fazendo requisições
 Para fazer requisições você pode utilizar o próprio navegador como na página de cada método haverá uma interface criada automaticamente pelo módulo rest_framework. Porém, como o foco é o funcionamento da API e a construção back-end recomendo que utilize um serviço como Postman ou o próprio terminal para requisições completas. Abaixo listei todos os métodos e exemplos de como requisitar pelo terminal. Para todos será necessário manter uma janela do terminal com o servidor ativo e outra para fazer a requisição. Na janela onde fará as requisições, instale o módulo "requests" com o comando `pip install requests` e depois ative o interpretador python com o comando `python`. A API pode ser utilizada com os seguintes métodos e respectivas funções:
 
-- **/api/criar_moeda/**  
+- **CREATE Coin**  
 Método `POST` que recebe os dados de valor, tipo('nota' ou 'moeda') e código(sigla da taxa de câmbio da moeda, ex: BRL, USD) para criar uma nova moeda na base. Crie a nota de 1 dólar na base com os seguintes comandos no interpretador python no terminal:  
 ```
 >>> import requests
->>> url = "http://localhost:8000/api/criar_moeda/"
+>>> url = "http://localhost:8000/api/coins/"
 >>> data = {"valor": 1, "tipo": "nota", "codigo": "USD"}
 >>> r = requests.post(url = url, data = data)
 >>> resp = r.text
 >>> resp
 ```
-Ao digitar 'resp' e apertar enter você deverá receber uma mensagem com o valor "Nova moeda registrada com sucesso." em caso de sucesso. No método seguinte você verá como consultar moedas por código e já poderá ver a que criou agora.
-- **/api/listar_moedas/**  
-Método `GET` que recebe o código das moedas que deseja visualizar e retorna uma lista com id, valor e código da moeda de todas as moedas registradas na base. Visualize a moeda em USD que acabou de criar fazendo uma requisição que envie o código:  
+Ao digitar 'resp' você deverá receber uma mensagem com o valor "Nova moeda registrada com sucesso." em caso de sucesso. No método seguinte você verá como consultar moedas por código e já poderá ver a que criou agora.
+- **LIST Coins**  
+Método `GET` que recebe o código das moedas que deseja visualizar como parâmetro de busca na URL e retorna uma lista com id, valor e código da moeda de todas as moedas registradas na base. Visualize a moeda em USD que acabou de criar fazendo uma requisição que envie o código:  
 ```
 >>> import requests
->>> url = "http://localhost:8000/api/listar_moedas/"
->>> data = {"codigo": "USD"}
->>> r = requests.get(url = url, data = data)
+>>> url = "http://localhost:8000/api/coins?codigo=USD"
+>>> r = requests.get(url = url)
 >>> resp = r.text
 >>> resp
 ```
-'resp' nesse caso deverá retornar a lista de moedas com código USD, nesse caso apenas a que criou acima. Você também pode fazer essa requisição utilizando o código "BRL", todas as cédulas estão cadastradas na lista.
+'resp' deverá retornar a lista de moedas com código USD, nesse caso apenas a que criou acima. Você também pode fazer essa requisição utilizando o código "BRL", todas as cédulas estão cadastradas na lista.
 
-- **/api/atualizar_moeda/**  
-Utiliza o método `POST` para receber o id da moeda pelo parâmetro "moeda_id" e altera o valor dela para o enviado como "novo_valor". Vamos atualizar a nota de 1 dólar que criamos para 100 dólares:  
+- **UPDATE Coin**  
+Utiliza o método `PUT` para receber o id da moeda pelo parâmetro "moeda_id" e altera o valor dela para o enviado como "novo_valor". Vamos atualizar a nota de 1 dólar que criamos para 100 dólares:  
 Obs: O valor para "moeda_id" pode ser encontrado ao listar as moedas de código USD como vimos acima.  
 ```
 >>> import requests
->>> url = "http://localhost:8000/api/altualizar_moeda/"
+>>> url = "http://localhost:8000/api/coins/"
 >>> data = {"moeda_id": 15, "novo_valor": 100}
 >>> r = requests.post(url = url, data = data)
 >>> resp = r.text
 >>> resp
 ```  
 'resp' retornará uma mensagem de confirmação que a moeda com o id enviado recebeu um novo valor. Ao listar as moedas de código USD agora já será possível visualizar o novo valor para o mesmo id.
-- **/api/deletar_moeda/**  
-Utiliza o método `DELETE` para pesquisar e apagar um objeto no banco utilizando o "moeda_id". Vamos deletar a moeda em USD que criamos com a seguinte requisição:  
+- **DELETE Coin**  
+Utiliza o método `DELETE` para pesquisar e apagar um objeto no banco utilizando o "moeda_id" como parâmetro de busca na URL. Vamos deletar a moeda em USD que criamos com a seguinte requisição:  
 ```
 >>> import requests
->>> url = "http://localhost:8000/api/deletar_moeda/"
->>> data = {"moeda_id": 15}
->>> r = requests.delete(url = url, data = data)
+>>> url = "http://localhost:8000/api/coins?moeda_id=18"
+>>> r = requests.delete(url = url)
 >>> resp = r.text
 >>> resp
 ```  
-Nesse caso 'resp' retorna uma mensagem confirmando que a moeda do selecionado id foi apagada com sucesso. Ao tentar listar as moedas com código USD agora ela já não estará mais na lista.
+'resp' retorna apenas uma mensagem confirmando que a moeda do selecionado id foi apagada com sucesso. Ao tentar listar as moedas com código USD agora ela já não estará mais na lista.
 - **/api/troco_certo/**  
 Para ver essa função em ação, digamos que você é o/a operador(a) de caixa de uma loja e o valor final de uma compra foi R$37,50. O cliente pagou com uma nota de R$100,00. Sem spoilers do valor correto e sem necessidade do cálculo mental, execute o código abaixo no terminal para ter o valor correto do troco e as cédulas que você deve retornar ao cliente (pensando na menor quantidade possível de cédulas e moedas):  
 Parâmetros: `valor_total` - valor final da compra, `valor_pago` - valor recebido do cliente para o pagamento  
@@ -96,4 +99,4 @@ Parâmetros: `valor_total` - valor final da compra, `valor_pago` - valor recebid
 >>> resp = r.text
 >>> resp
 ```  
-O retorno de 'resp' retornará o troco correto e as cédulas em uma mensagem "bonita". Também seria possível alterar o código para retornar um JSON com essas informações para que elas pudessem ser lidas, interpretadas e retornadas por um possível sistema de caixa da maneira preferida pela empresa.
+O retorno de 'resp' retornará o troco correto e as cédulas em uma string organizada.
