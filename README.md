@@ -44,7 +44,7 @@ Após ter instalado todos os módulos em seu ambiente virtual e estar com o ambi
 ## Fazendo requisições
 Para fazer requisições você pode utilizar o próprio navegador como na página de cada método haverá uma interface criada automaticamente pelo módulo rest_framework. Porém, como o foco é o funcionamento da API e a construção back-end recomendo que utilize um serviço como Postman ou o próprio terminal para requisições completas. Abaixo listei todos os métodos e exemplos de como requisitar pelo terminal. Para todos será necessário manter uma janela do terminal com o servidor ativo e outra para fazer a requisição. Na janela onde fará as requisições, instale o módulo "requests" com o comando `pip install requests` e depois ative o interpretador python com o comando `python`. A API pode ser utilizada com os seguintes métodos e respectivas funções:
 
-- **CREATE Coin**  
+- **CREATE Coin - /api/coins/**  
 Método `POST` que recebe os dados de valor, tipo('nota' ou 'moeda') e código(sigla da taxa de câmbio da moeda, ex: BRL, USD) para criar uma nova moeda na base. Crie a nota de 1 dólar na base com os seguintes comandos no interpretador python no terminal:  
 ```
 >>> import requests
@@ -66,7 +66,7 @@ Método `GET` que recebe o código das moedas que deseja visualizar como parâme
 ```
 'resp' deverá retornar a lista de moedas com código USD, nesse caso apenas a que criou acima. Você também pode fazer essa requisição utilizando o código "BRL", todas as cédulas estão cadastradas na lista.
 
-- **UPDATE Coin**  
+- **UPDATE Coin - /api/coins/**  
 Utiliza o método `PUT` para receber o id da moeda pelo parâmetro "moeda_id" e altera o valor dela para o enviado como "novo_valor". Vamos atualizar a nota de 1 dólar que criamos para 100 dólares:  
 Obs: O valor para "moeda_id" pode ser encontrado ao listar as moedas de código USD como vimos acima.  
 ```
@@ -78,7 +78,7 @@ Obs: O valor para "moeda_id" pode ser encontrado ao listar as moedas de código 
 >>> resp
 ```  
 'resp' retornará uma mensagem de confirmação que a moeda com o id enviado recebeu um novo valor. Ao listar as moedas de código USD agora já será possível visualizar o novo valor para o mesmo id.
-- **DELETE Coin**  
+- **DELETE Coin - /api/coins/**  
 Utiliza o método `DELETE` para pesquisar e apagar um objeto no banco utilizando o "moeda_id" como parâmetro de busca na URL. Vamos deletar a moeda em USD que criamos com a seguinte requisição:  
 ```
 >>> import requests
@@ -88,7 +88,7 @@ Utiliza o método `DELETE` para pesquisar e apagar um objeto no banco utilizando
 >>> resp
 ```  
 'resp' retorna apenas uma mensagem confirmando que a moeda do selecionado id foi apagada com sucesso. Ao tentar listar as moedas com código USD agora ela já não estará mais na lista.
-- **/api/troco_certo/**  
+- **POST - /api/troco_certo/**  
 Para ver essa função em ação, digamos que você é o/a operador(a) de caixa de uma loja e o valor final de uma compra foi R$37,50. O cliente pagou com uma nota de R$100,00. Sem spoilers do valor correto e sem necessidade do cálculo mental, execute o código abaixo no terminal para ter o valor correto do troco e as cédulas que você deve retornar ao cliente (pensando na menor quantidade possível de cédulas e moedas):  
 Parâmetros: `valor_total` - valor final da compra, `valor_pago` - valor recebido do cliente para o pagamento  
 ```
